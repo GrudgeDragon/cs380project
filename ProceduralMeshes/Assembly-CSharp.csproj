@@ -51,8 +51,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\MeshGenerator.cs" />
-     <Compile Include="Assets\Sources\LightningBolt.cs" />
+     <Compile Include="Assets\Helix.cs" />
+     <Compile Include="Assets\MeshBuilder.cs" />
+     <Compile Include="Assets\MeshHelpers.cs" />
+     <Compile Include="Assets\MeshTester.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Programs/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -86,10 +88,6 @@
  <Reference Include="UnityEngine.Purchasing">
  <HintPath>C:/Users/Christopher/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.purchasing@1.0.1/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{1350F888-58F0-9686-9B07-E0629E92E8C5}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -228,19 +228,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a65c79da756e7741b0ba80efd1f9f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VertList: []
-  FaceList: 
   HelixHeight: 12
   HelixMajorRadius: 4
   HelixMinorRadius: 2
-  HelixMinorTurns: 1
+  HelixTurns: 1
   SegmentLength: 1
-  TestCurve:
+  RebuildLive: 0
+  Rebuild: 0
+  RecursiveVine: 0
+  XCurve:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  YCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ZCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  numSegments: 50
+  height: 5
+  Factor: 1
+  ConeRadius: 1
 --- !u!23 &72450189
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -483,31 +500,90 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a65c79da756e7741b0ba80efd1f9f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VertList: []
-  FaceList: 
   HelixHeight: 12
   HelixMajorRadius: 4
   HelixMinorRadius: 2
-  HelixMinorTurns: 1
+  HelixTurns: 1
   SegmentLength: 1
-  TestCurve:
+  RebuildLive: 1
+  Rebuild: 1
+  RecursiveVine: 1
+  XCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
+      time: 0.111375555
+      value: 0.1814718
+      inSlope: 1.6294822
+      outSlope: 1.6294822
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.51555794
+      value: 0.41549417
+      inSlope: 5.319097
+      outSlope: 5.319097
       tangentMode: 0
     - serializedVersion: 2
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: 0.6679535
+      inSlope: 1
+      outSlope: 1
       tangentMode: 0
-    m_PreInfinity: 2
+    m_PreInfinity: 1
     m_PostInfinity: 2
     m_RotationOrder: 0
+  YCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.111375555
+      value: 0.1814718
+      inSlope: 1.6294822
+      outSlope: 1.6294822
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.51555794
+      value: 0.41549417
+      inSlope: 5.319097
+      outSlope: 5.319097
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.6679535
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    m_PreInfinity: 1
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  ZCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.111375555
+      value: 0.1814718
+      inSlope: 1.6294822
+      outSlope: 1.6294822
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.51555794
+      value: 0.41549417
+      inSlope: 5.319097
+      outSlope: 5.319097
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.6679535
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    m_PreInfinity: 1
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  numSegments: 50
+  height: 5
+  Factor: 1
+  ConeRadius: 1
 --- !u!1 &825480270
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,19 +698,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a65c79da756e7741b0ba80efd1f9f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VertList: []
-  FaceList: 
   HelixHeight: 12
   HelixMajorRadius: 4
   HelixMinorRadius: 2
-  HelixMinorTurns: 1
+  HelixTurns: 1
   SegmentLength: 1
-  TestCurve:
+  RebuildLive: 0
+  Rebuild: 0
+  RecursiveVine: 0
+  XCurve:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  YCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ZCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  numSegments: 50
+  height: 5
+  Factor: 1
+  ConeRadius: 1
 --- !u!23 &1209828713
 MeshRenderer:
   m_ObjectHideFlags: 0
