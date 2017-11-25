@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\CurvyCone.cs" />
+     <Compile Include="Assets\FlowerBase.cs" />
      <Compile Include="Assets\FlowerPetals.cs" />
      <Compile Include="Assets\Helix.cs" />
      <Compile Include="Assets\MeshBuilder.cs" />

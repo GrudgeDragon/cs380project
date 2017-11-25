@@ -33,6 +33,8 @@ public class MeshBuilder : MonoBehaviour
 
     public static int AddLatticeWithCurves(Matrix4x4 localSpace,
        float height,
+       float width,
+       float profileFactor,
        int heightSubdivisions,
        int widthSubDivisions,
        bool flipFaces,
@@ -51,14 +53,14 @@ public class MeshBuilder : MonoBehaviour
             // t for height
             float th = (float)h / heightSubdivisions;
             float th_next = (float)(h + 1) / heightSubdivisions;
-            float width = widthCurve.Evaluate(th);
+            float currWidth = widthCurve.Evaluate(th) * width; 
             for (int w = 0; w <= widthSubDivisions; ++w)
             {
                 // t for width
                 float tw = (float)w / widthSubDivisions;
-                Vector4 pos = new Vector4(-0.5f * width + tw * width,
+                Vector4 pos = new Vector4(-0.5f * currWidth + tw * currWidth,
                     0,
-                    profileCurve.Evaluate(tw) * profileHeightCurve.Evaluate(th),
+                    profileCurve.Evaluate(tw) * profileHeightCurve.Evaluate(th) * profileFactor,
                     1);
 
                 // rotation stuff
