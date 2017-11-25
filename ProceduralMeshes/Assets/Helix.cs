@@ -4,6 +4,52 @@ using UnityEngine;
 
 public class Helix : MonoBehaviour
 {
+    // All mesh generators should have these
+    public bool RebuildLive = false;
+    public bool Rebuild = false;
+    private int seed; // used for seeding rand consistantly
+
+    // these fields are custom to this mesh generator
+    public float HelixHeight = 12;
+    public float HelixMajorRadius = 4;
+    public float HelixMinorRadius = 2;
+    public float HelixTurns = 1;
+    public float SegmentLength = 1; // aproximate length of spine between segments
+    int minorSubdivisions = 10;     // number of verts in the rings
+    public bool RecursiveVine = false;
+
+
+    void GenerateMesh()
+    {
+        Mesh mesh = GetComponent<MeshFilter>().mesh;
+        MeshBuilder.PreBuild(mesh);
+        UnityEngine.Random.seed = seed;
+        MakeASweetAssHelix(Matrix4x4.identity, 
+            HelixMajorRadius, HelixMinorRadius, 
+            HelixHeight, HelixTurns, true,
+            RecursiveVine, SegmentLength, minorSubdivisions);
+        MeshBuilder.PostBuild(mesh);
+    }
+
+    void Start()
+    {
+        Vector3 startPosition = GetComponent<Transform>().position;
+        seed = (int)(startPosition.x + startPosition.y + startPosition.z);
+        GenerateMesh();
+    }
+
+    // this gets called every frame
+    void Update()
+    {
+        if (RebuildLive)
+            GenerateMesh();
+
+        if (Rebuild)
+        {
+            GenerateMesh();
+            Rebuild = false;
+        }
+    }
 
 
     public static void MakeASweetAssHelix(Matrix4x4 helixSpace, float majorRadius, float minorRadius, float height, float revolutions, bool recursive, bool usingRecursive, float segmentLength, int minorSubdivisions)
@@ -36,9 +82,6 @@ public class Helix : MonoBehaviour
 
         int numSegments = 1 + (int)(totalArcLen / segmentLength); // number of segments in the helix
         float spd = height / numSegments; // vertical speed
-        // Debug.Log(a);
-        // Debug.Log(b);
-        // Debug.Log(totalArcLen);
 
         // for each ring that will make up the helix
         for (int i = 0; i <= numSegments; ++i)
@@ -113,4 +156,6 @@ public class Helix : MonoBehaviour
             prevRing = ring;
         }
     }
+
+
 }

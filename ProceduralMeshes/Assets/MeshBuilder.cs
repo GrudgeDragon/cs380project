@@ -7,6 +7,128 @@ public class MeshBuilder : MonoBehaviour
 
     public static List<Vector3> VertList = new List<Vector3>();
     public static List<int> FaceList = new List<int>();
+    public static List<Vector2> UVList = new List<Vector2>();
+
+    public static void PreBuild(Mesh mesh)
+    {
+        // get the mesh and reset empty it of data
+
+        mesh.Clear();
+        MeshBuilder.VertList.Clear();
+        MeshBuilder.FaceList.Clear();
+        MeshBuilder.UVList.Clear();
+    }
+
+    public static void PostBuild(Mesh mesh)
+    {
+        if (MeshBuilder.VertList.Count != MeshBuilder.UVList.Count)
+            Debug.LogError("Number of UVs (" + MeshBuilder.UVList.Count + ") doesn't match number of Verts(" + MeshBuilder.VertList.Count + ")");
+        
+        // assign to the mesh
+        mesh.vertices = MeshBuilder.VertList.ToArray();
+        mesh.triangles = MeshBuilder.FaceList.ToArray();
+        mesh.uv = MeshBuilder.UVList.ToArray();
+        mesh.RecalculateNormals(); // without this we get no light
+    }
+
+    public static int AddLatticeWithCurves(Matrix4x4 localSpace,
+       float height,
+       int heightSubdivisions,
+       int widthSubDivisions,
+       bool flipFaces,
+       AnimationCurve widthCurve,
+       AnimationCurve profileCurve,
+       AnimationCurve profileHeightCurve,
+       AnimationCurve spineCurve)
+    {
+        int firstVert = VertList.Count;
+        int previousRow = -1;
+
+        for (int h = 0; h <= heightSubdivisions; ++h)
+        {
+            int thisRow = VertList.Count;
+
+            // t for height
+            float th = (float)h / heightSubdivisions;
+            float th_next = (float)(h + 1) / heightSubdivisions;
+            float width = widthCurve.Evaluate(th);
+            for (int w = 0; w <= widthSubDivisions; ++w)
+            {
+                // t for width
+                float tw = (float)w / widthSubDivisions;
+                Vector4 pos = new Vector4(-0.5f * width + tw * width,
+                    0,
+                    profileCurve.Evaluate(tw) * profileHeightCurve.Evaluate(th),
+                    1);
+
+                // rotation stuff
+                float slope = spineCurve.Evaluate(th_next) - spineCurve.Evaluate(th);
+
+                Vector3 dir = new Vector3(0, 1.0f / heightSubdivisions, slope);
+                Matrix4x4 rot = Matrix4x4.Rotate(Quaternion.LookRotation(dir, dir));
+
+                pos = rot * pos;
+
+                pos.y = th * height;
+                pos.z += spineCurve.Evaluate(th);
+
+                pos = localSpace * pos;
+                VertList.Add(pos);
+                UVList.Add(new Vector2(tw, th));
+            }
+
+            // link the rows together
+            if (previousRow != -1)
+            {
+                if (flipFaces)
+                    AddStrip(previousRow, thisRow, widthSubDivisions + 1);
+                else
+                    AddStrip(thisRow, previousRow, widthSubDivisions + 1);
+            }
+
+            previousRow = thisRow;
+        }
+
+
+        return firstVert;
+    }
+
+    public static int AddLattice(Matrix4x4 localSpace, float height, int heightSubdivisions, float width, int widthSubDivisions, bool addBackFaces)
+    {
+        int firstVert = MeshBuilder.VertList.Count;
+        int previousRow = -1;
+
+        for (int h = 0; h <= heightSubdivisions; ++h)
+        {
+            int thisRow = VertList.Count;
+
+            // t for height
+            float th = (float)h / heightSubdivisions;
+            for (int w = 0; w <= widthSubDivisions; ++w)
+            {
+                // t for width
+                float tw = (float)w / widthSubDivisions;
+                Vector4 pos = new Vector4(-0.5f * width + tw * width, th * height, 0, 1);
+                pos = localSpace * pos;
+                VertList.Add(pos);
+                UVList.Add(new Vector2(tw, th));
+                //Debug.Log(pos);
+            }
+
+            // link the rows together
+            if (previousRow != -1)
+            {
+                AddStrip(thisRow, previousRow, widthSubDivisions + 1);
+                if (addBackFaces)
+                    AddStrip(previousRow, thisRow, widthSubDivisions + 1);
+            }
+
+            previousRow = thisRow;
+        }
+
+
+        return firstVert;
+    }
 
     // creates a ring in the x-y plane, perpindicular to unity's forward direction, z
     public static int AddRing(Matrix4x4 trans, int numPoints, float radius)
@@ -25,6 +147,7 @@ public class MeshBuilder : MonoBehaviour
             Vector4 pos = new Vector4(radius * Mathf.Cos(currentAngle), radius * Mathf.Sin(currentAngle), 0, 1);
             pos = trans * pos;
             VertList.Add(pos);
+            UVList.Add(new Vector2(0,0));
             currentAngle += angleIncrement;
         }
         // return the index of the first new vert
@@ -32,28 +155,54 @@ public class MeshBuilder : MonoBehaviour
 
     }
 
-    /* creates a band of quads between two sets of points.
-       Be carelful, top and bottom edges are not arbitrary, you may flip the normals the wrong way */
-    public static int AddBand(int topEdge, int bottomEdge, int num)
+    /* creates a strip of quads between two sets of points.
+   Be carelful, top and bottom edges are not arbitrary, you may flip the normals the wrong way 
+   numVerts is the number of verts in one edge*/
+    public static int AddStrip(int topEdge, int bottomEdge, int numVerts)
     {
         // get what will be the index of the first face to be added
         int firstFace = FaceList.Count;
 
         // for quad that will make up the band
-        for (int i = 0; i < num; ++i)
+        for (int i = 0; i < numVerts - 1; ++i)
         {
             // first quad triangle
             FaceList.Add(topEdge + i);
             FaceList.Add(bottomEdge + i);
-            FaceList.Add(bottomEdge + (i + 1) % num);
+            FaceList.Add(bottomEdge + i + 1);
 
             // second quad triangle
             FaceList.Add(topEdge + i);
-            FaceList.Add(bottomEdge + (i + 1) % num);
-            FaceList.Add(topEdge + (i + 1) % num);
+            FaceList.Add(bottomEdge + i + 1);
+            FaceList.Add(topEdge + i + 1);
         }
         return firstFace;
     }
+
+    /* creates a band of quads between two sets of points.
+       Be carelful, top and bottom edges are not arbitrary, you may flip the normals the wrong way */
+    public static int AddBand(int topEdge, int bottomEdge, int numVerts)
+    {
+        // get what will be the index of the first face to be added
+        int firstFace = FaceList.Count;
+
+        // for quad that will make up the band
+        for (int i = 0; i < numVerts; ++i)
+        {
+            // first quad triangle
+            FaceList.Add(topEdge + i);
+            FaceList.Add(bottomEdge + i);
+            FaceList.Add(bottomEdge + (i + 1) % numVerts);
+
+            // second quad triangle
+            FaceList.Add(topEdge + i);
+            FaceList.Add(bottomEdge + (i + 1) % numVerts);
+            FaceList.Add(topEdge + (i + 1) % numVerts);
+        }
+        return firstFace;
+    }
+
+
 
     // make a cone along the forward vector I think
     public static void MakeCone(Matrix4x4 localSpace, float baseRadius, float height)
@@ -95,6 +244,7 @@ public class MeshBuilder : MonoBehaviour
         int tipVert = VertList.Count;
         Vector4 /*just the*/ tip = localSpace * starPos + localSpace * dir * height;
         VertList.Add(tip);
+        UVList.Add(new Vector2(0,0));
         AddFanCone(tipVert, prevRing, radialSubdivisions, false);
     }
 

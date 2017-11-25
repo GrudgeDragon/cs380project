@@ -60,7 +60,6 @@ D:\Projects\cs380project\ProceduralMeshes\Temp\bin\Debug\Unity.UNetWeaver.dll
 D:\Projects\cs380project\ProceduralMeshes\Temp\bin\Debug\Unity.CecilTools.dll
 D:\Projects\cs380project\ProceduralMeshes\Temp\bin\Debug\Unity.Cecil.Pdb.dll
 D:\Projects\cs380project\ProceduralMeshes\Temp\bin\Debug\Unity.Cecil.Mdb.dll
-D:\Projects\cs380project\ProceduralMeshes\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
 D:\Projects\cs380project\ProceduralMeshes\Temp\bin\Debug\UnityEngine.xml
 D:\Projects\cs380project\ProceduralMeshes\Temp\bin\Debug\UnityEditor.xml
 D:\Projects\cs380project\ProceduralMeshes\Temp\bin\Debug\UnityEngine.UI.xml

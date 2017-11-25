@@ -1,0 +1,288 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1610768834319330}
+  m_IsPrefabParent: 1
+--- !u!1 &1610768834319330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4996075726996956}
+  - component: {fileID: 33544554421279772}
+  - component: {fileID: 65211367637445856}
+  - component: {fileID: 23972380735239414}
+  - component: {fileID: 114695979932909962}
+  - component: {fileID: 114355316906862224}
+  m_Layer: 0
+  m_Name: PetalsTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4996075726996956
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1610768834319330}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &23972380735239414
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1610768834319330}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: cdbce5ecb4ddaa8479b5de89d2bd1984, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &33544554421279772
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1610768834319330}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &65211367637445856
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1610768834319330}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114355316906862224
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1610768834319330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 083db9ea564f3d54ba9efbfb39581589, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LeafWidthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 5.377029
+      outSlope: 5.377029
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.50883275
+      value: 0.9950967
+      inSlope: -0.08783199
+      outSlope: -0.08783199
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.99664307
+      value: 0
+      inSlope: -5.784305
+      outSlope: -5.784305
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  LeafCrossSectionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.5033326
+      value: -0.02019909
+      inSlope: 3.7035782
+      outSlope: 3.7035782
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1.0016667
+      value: -0.015151501
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+    m_PreInfinity: 0
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  LeafCrossSectionHeight:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1.0050049
+      value: -0.015151978
+      inSlope: -0.50502187
+      outSlope: -0.50502187
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  LeafCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: -0.005
+      value: -0.005050505
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+    - serializedVersion: 2
+      time: 0.99666667
+      value: 0.989899
+      inSlope: 2.813853
+      outSlope: 2.813853
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  WidthDivisions: 15
+  HeightDivisions: 15
+  InnerPush: 1.8
+  MidPush: 3.69
+  OutterPush: 7.82
+  InnerTwist: -0.64
+  MidTwist: 1.42
+  OuterTwist: 1
+  InnerLength: 2.91
+  MidLength: 3.01
+  OuterLength: 3.14
+--- !u!114 &114695979932909962
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1610768834319330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a65c79da756e7741b0ba80efd1f9f99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RebuildLive: 0
+  Rebuild: 1
+  XCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.111375555
+      value: 0.1814718
+      inSlope: 1.6294822
+      outSlope: 1.6294822
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.51555794
+      value: 0.41549417
+      inSlope: 5.319097
+      outSlope: 5.319097
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.6679535
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    m_PreInfinity: 1
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  YCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.111375555
+      value: 0.1814718
+      inSlope: 1.6294822
+      outSlope: 1.6294822
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.51555794
+      value: 0.41549417
+      inSlope: 5.319097
+      outSlope: 5.319097
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.6679535
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    m_PreInfinity: 1
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  ZCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0.111375555
+      value: 0.1814718
+      inSlope: 1.6294822
+      outSlope: 1.6294822
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.51555794
+      value: 0.41549417
+      inSlope: 5.319097
+      outSlope: 5.319097
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0.6679535
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    m_PreInfinity: 1
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  numSegments: 50
+  Height: 5
+  Factor: 1
+  ConeRadius: 1

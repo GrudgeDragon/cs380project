@@ -51,10 +51,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CurvyCone.cs" />
+     <Compile Include="Assets\FlowerPetals.cs" />
      <Compile Include="Assets\Helix.cs" />
      <Compile Include="Assets\MeshBuilder.cs" />
-     <Compile Include="Assets\MeshHelpers.cs" />
-     <Compile Include="Assets\MeshTester.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Programs/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
