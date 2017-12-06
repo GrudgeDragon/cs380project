@@ -41,7 +41,8 @@ public class MeshBuilder : MonoBehaviour
        AnimationCurve widthCurve,
        AnimationCurve profileCurve,
        AnimationCurve profileHeightCurve,
-       AnimationCurve spineCurve)
+       AnimationCurve bendCurve,
+       float bendFactor)
     {
         int firstVert = VertList.Count;
         int previousRow = -1;
@@ -64,7 +65,7 @@ public class MeshBuilder : MonoBehaviour
                     1);
 
                 // rotation stuff
-                float slope = spineCurve.Evaluate(th_next) - spineCurve.Evaluate(th);
+                float slope = bendFactor * (bendCurve.Evaluate(th_next) - bendCurve.Evaluate(th));
 
                 Vector3 dir = new Vector3(0, 1.0f / heightSubdivisions, slope);
                 Matrix4x4 rot = Matrix4x4.Rotate(Quaternion.LookRotation(dir, dir));
@@ -72,7 +73,7 @@ public class MeshBuilder : MonoBehaviour
                 pos = rot * pos;
 
                 pos.y = th * height;
-                pos.z += spineCurve.Evaluate(th);
+                pos.z += bendCurve.Evaluate(th) * bendFactor;
 
                 pos = localSpace * pos;
                 VertList.Add(pos);
@@ -133,7 +134,7 @@ public class MeshBuilder : MonoBehaviour
     }
 
     // creates a ring in the x-y plane, perpindicular to unity's forward direction, z
-    public static int AddRing(Matrix4x4 trans, int numPoints, float radius)
+    public static int AddRing(Matrix4x4 trans, int numPoints, float radius, float uvHeight)
     {
         // remember the index of the first vert
         int firstVert = VertList.Count;
@@ -149,7 +150,7 @@ public class MeshBuilder : MonoBehaviour
             Vector4 pos = new Vector4(radius * Mathf.Cos(currentAngle), radius * Mathf.Sin(currentAngle), 0, 1);
             pos = trans * pos;
             VertList.Add(pos);
-            UVList.Add(new Vector2(0,0));
+            UVList.Add(new Vector2((float)i / numPoints,uvHeight));
             currentAngle += angleIncrement;
         }
         // return the index of the first new vert
@@ -207,7 +208,7 @@ public class MeshBuilder : MonoBehaviour
 
 
     // make a cone along the forward vector I think
-    public static void MakeCone(Matrix4x4 localSpace, float baseRadius, float height)
+    public static void MakeCone(Matrix4x4 localSpace, float baseRadius, float height, float startUVHeight, float endUVHeight)
     {
         Vector4 starPos = Vector3.zero;
         Vector4 dir = Vector3.up;
@@ -233,7 +234,7 @@ public class MeshBuilder : MonoBehaviour
 
             // add a ring to the mesh
             int ring; // index of the first vert in a ring
-            ring = AddRing(localSpace * trans * rotation, radialSubdivisions, (1 - t) * baseRadius);
+            ring = AddRing(localSpace * trans * rotation, radialSubdivisions, (1 - t) * baseRadius, Mathf.Lerp(startUVHeight, endUVHeight, t));
 
             // if this is not the first ring
             if (prevRing != -1)
@@ -246,7 +247,7 @@ public class MeshBuilder : MonoBehaviour
         int tipVert = VertList.Count;
         Vector4 /*just the*/ tip = localSpace * starPos + localSpace * dir * height;
         VertList.Add(tip);
-        UVList.Add(new Vector2(0,0));
+        UVList.Add(new Vector2(0, endUVHeight));
         AddFanCone(tipVert, prevRing, radialSubdivisions, false);
     }
 

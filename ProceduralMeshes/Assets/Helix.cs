@@ -9,7 +9,7 @@ public class Helix : MonoBehaviour
     // All mesh generators should have these
     public bool RebuildLive = false;
     public bool Rebuild = false;
-    private int seed; // used for seeding rand consistantly
+    private Stack<UnityEngine.Random.State> seeds = new Stack<UnityEngine.Random.State>(); // used for seeding rand consistantly
 
     // these fields are custom to this mesh generator
     public float HelixHeight = 12;
@@ -27,20 +27,24 @@ public class Helix : MonoBehaviour
     {
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         MeshBuilder.PreBuild(mesh);
-        UnityEngine.Random.seed = seed;
         int spawnCounter = 0;
         MakeASweetAssHelix(Matrix4x4.identity, 
-            HelixMajorRadius, HelixMinorRadius, 
-            HelixHeight, HelixTurns, true,
-            RecursiveVine, SegmentLength, minorSubdivisions,
-            ref spawnCounter);
+            HelixMajorRadius, 
+            HelixMinorRadius, 
+            HelixHeight, 
+            HelixTurns, 
+            true,
+            RecursiveVine, 
+            SegmentLength, minorSubdivisions,
+            ref spawnCounter, 0, 1, 1);
         MeshBuilder.PostBuild(mesh);
     }
 
     void Start()
     {
-        Vector3 startPosition = GetComponent<Transform>().position;
-        seed = (int)(startPosition.x + startPosition.y + startPosition.z);
+        Vector3 startPosition = transform.position;
+        UnityEngine.Random.InitState((int)(startPosition.x + startPosition.y + startPosition.z));
+        seeds.Push(UnityEngine.Random.state);
         GenerateMesh();
     }
 
@@ -58,9 +62,9 @@ public class Helix : MonoBehaviour
     }
 
 
-    void MakeASweetAssHelix(Matrix4x4 vineToModel, float majorRadius, float minorRadius, float height, float revolutions, bool recursive, bool usingRecursive, float segmentLength, int minorSubdivisions, ref int spawnCounter)
+    void MakeASweetAssHelix(Matrix4x4 vineToModel, float majorRadius, float minorRadius, float height, float revolutions, bool recursive, bool usingRecursive, float segmentLength, int minorSubdivisions, ref int spawnCounter, float startingUVHeight, float endUVHeight, float flip)
     {
-        //int spawnCounter = 0; // this is used for chaching spawned prefabs
+        UnityEngine.Random.state = seeds.Peek();
 
         int prevRing = -1;// index of the last ring added to the mesh
         float arc = revolutions * 2 * Mathf.PI; // the entire arc 
@@ -83,30 +87,34 @@ public class Helix : MonoBehaviour
         }
         float totalArcLen = numHalfTurns * (b - a).magnitude; // fundamental theory of calculus Sf(x)dx = F(b)-F(a)
 
-        int numSegments = 1 + (int)(totalArcLen / segmentLength); // number of segments in the helix
+        //int numSegments = 1 + (int)(totalArcLen / segmentLength); // number of segments in the helix
         //float spd = height / numSegments; // vertical speed
 
+        float effecitveSegmentLength = segmentLength;
+        if (effecitveSegmentLength > totalArcLen / 5)
+            effecitveSegmentLength = totalArcLen / 5;
+
         // for each ring that will make up the helix
-        for (int i = 0; i <= numSegments; ++i)
+        for (float i = 0; i <= totalArcLen + effecitveSegmentLength; i += effecitveSegmentLength)
         {
             // t is our main paremeter      
-            float t = (float)i / numSegments + 0.001f;
+            float t = Mathf.Min(i / totalArcLen, 1);
             float tc = 1 - t; // compliment of t
 
             // radians of revolution
-            float r = t * arc;
+            float r = flip * t * arc;
 
             // this f(x) and `f(x) are used for determining the radius. f(x) is an arbitrary function. outputs [0,1] for t [0,1]
-            float x = (-(t * t) + 2 * t);
-            float dx = -2 * t + 2;
+            float x = flip * (-(t * t) + 2 * t);
+            float dx = flip * -2 * t + 2;
 
             // helix equation and its derivitive are used to get position and direction. we make the helix start straight up by applying t to minimize early twisting.
-            Vector3 pos = new Vector3(t * x * majorRadius * Mathf.Cos(r), t * height, t * x * majorRadius * Mathf.Sin(r));
-            Vector3 dir = new Vector3(t * dx * majorRadius * -Mathf.Sin(r) * arc, height, t * dx * majorRadius * Mathf.Cos(r) * arc);
+            Vector3 pos = new Vector3(flip * t * x * majorRadius * Mathf.Cos(r),         t * height, flip * t * x * majorRadius * Mathf.Sin(r));
+            Vector3 dir = new Vector3(flip * t * dx * majorRadius * -Mathf.Sin(r) * arc, height,     flip * t * dx * majorRadius * Mathf.Cos(r) * arc);
 
             // use position and direction to create our local matrices
             Matrix4x4 trans = Matrix4x4.Translate(pos); // position in helix
-            Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.LookRotation(dir, Vector3.up)); // direction of helix
+            Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.LookRotation(dir, flip*Vector3.up)); // direction of helix
             Matrix4x4 helixToModel = vineToModel * trans * rotation; 
 
             // make spikes and other decorators
@@ -117,15 +125,17 @@ public class Helix : MonoBehaviour
                 {
                     Debug.LogError("Too many verts");
                     // break out of double nested loops
-                    i = numSegments + 1;
+                    i = totalArcLen + 1;
                     break;
                 }
 
 
                 // ~15% chance to make a decorator, less likely at the begining
                 float roll = UnityEngine.Random.value;
-                if (roll > 0.15 || roll > t * t)
+                if (roll < 0.85)
                     continue;
+
+                roll = (roll - 0.85f) / 0.15f;
 
                 float u = ((float)j / minorSubdivisions) * 2 * Mathf.PI; // normalized param
 
@@ -142,57 +152,72 @@ public class Helix : MonoBehaviour
                 Matrix4x4 normalRot = Matrix4x4.Rotate(Quaternion.LookRotation(dir, normal_model));
                 Matrix4x4 normalToModel = vineToModel * trans * normalRot; // normal space to model space
 
-                if (usingRecursive && recursive && UnityEngine.Random.value > .9f && t > 0.33f) // doesn't use spawn new vines in the bottom third
+           
+                if (usingRecursive && recursive && roll < 0.1) // doesn't use spawn new vines in the bottom third
                 {
-                    MakeASweetAssHelix(normalToModel, majorRadius * tc, minorRadius * tc * tc, height * tc, revolutions, false, usingRecursive, segmentLength, minorSubdivisions, ref spawnCounter);
-                }
-                else if (UnityEngine.Random.value > .75f && t > 0.66f)
-                {
-                    Transform tran = GetComponent<Transform>();
-
-                    // get the object to spawn
-                    Transform other;
-                    if (spawnedObjects.Count < spawnCounter + 1)
-                    {
-                        // spawn one
-                        other = Instantiate(flowerPrefab, Vector3.zero, Quaternion.identity, tran);
-                        spawnedObjects.Add(other);
-                    }
-                    else
-                    {
-                        // recycle one from the pool
-                        other = spawnedObjects[spawnCounter];
-                        spawnedObjects[spawnCounter].gameObject.SetActive(true);
-                    }
-                    spawnCounter++;
-
-                    Vector3 d = normal_model;
-                    d = transform.localToWorldMatrix * normal_model; // works on first vine, not recursive vine
-                    d = transform.localToWorldMatrix * normalToModel * Vector3.up; 
-
-                    // set rotation of spawned object
-                    other.rotation = Quaternion.LookRotation(d, Vector3.up);
-
-                    // set position of spawned object
-                    Vector4 otherPos = (pos + (normal_model * 1/fudge));
-                    otherPos.w = 1;
-                     other.position = tran.localToWorldMatrix * vineToModel * otherPos;
-                    //other.position = spineSpace * new Vector4(0,0,0,1);
-
-                    // set scale of spawned object
-                    float s = 0.2f * minorRadius * tc ;
-                    other.localScale = new Vector3(s,s,s);
+                    seeds.Push(UnityEngine.Random.state);
+                    MakeASweetAssHelix(normalToModel, majorRadius * tc, minorRadius * tc * tc, height * tc * tc, revolutions * tc * tc, false, false, 
+                        effecitveSegmentLength / 2 * tc, minorSubdivisions, ref spawnCounter, startingUVHeight, Mathf.Lerp(startingUVHeight, endUVHeight, tc), -1);
+                    UnityEngine.Random.state = seeds.Pop();
+                    roll = 1;
                 }
                 else
                 {
-                    MeshBuilder.MakeCone(normalToModel, 0.25f * minorRadius * tc, 2 * minorRadius * tc);
+                    roll = (roll - 0.1f) / 0.9f;
+                }
+
+                // if we should attempt to make a flower instead of a spike
+                if (roll < 0.1f)
+                {
+                    float s;// = 0.2f * minorRadius * tc;
+                    s = (-20 * (t - 0.75f) * (t - 0.75f) + 1) * 0.1f * minorRadius;
+                    if (s > 0)
+                    {
+                        Debug.Log("size: " + s);
+                        // get the object to spawn
+                        Transform other;
+                        if (spawnedObjects.Count < spawnCounter + 1)
+                        {
+                            // spawn one
+                            other = Instantiate(flowerPrefab, Vector3.zero, Quaternion.identity, transform);
+                            spawnedObjects.Add(other);
+                        }
+                        else
+                        {
+                            // recycle one from the pool
+                            other = spawnedObjects[spawnCounter];
+                            spawnedObjects[spawnCounter].gameObject.SetActive(true);
+                        }
+                        spawnCounter++;
+
+                        Vector3 d = normal_model;
+                        d = transform.localToWorldMatrix * normal_model; // works on first vine, not recursive vine
+                        d = transform.localToWorldMatrix * normalToModel * Vector3.up;
+
+                        // set rotation of spawned object
+                        other.rotation = Quaternion.LookRotation(d, Vector3.up);
+
+                        // set position of spawned object
+                        Vector4 otherPos = (pos + (normal_model * 1 / fudge));
+                        otherPos.w = 1;
+                        other.position = transform.localToWorldMatrix * vineToModel * otherPos;
+                        //other.position = spineSpace * new Vector4(0,0,0,1);
+
+                        // set scale of spawned object
+
+                        other.localScale = new Vector3(s, s, s);
+                    }
+                }
+                else
+                {
+                    MeshBuilder.MakeCone(normalToModel, 0.25f * minorRadius * tc, 2 * minorRadius * tc, tc*tc, 1);
                 }
             }
 
 
             // add a ring to the mesh
             int ring; // index of the first vert in a ring
-            ring = MeshBuilder.AddRing(helixToModel, minorSubdivisions, minorRadius * tc);
+            ring = MeshBuilder.AddRing(helixToModel, minorSubdivisions, minorRadius * tc, Mathf.Lerp(startingUVHeight, endUVHeight, tc));
 
             // if this is not the first ring
             if (prevRing != -1)

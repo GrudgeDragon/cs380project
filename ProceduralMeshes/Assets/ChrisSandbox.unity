@@ -192,7 +192,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 49908911}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -13.94, z: 0}
   m_LocalScale: {x: 2.1753316, y: 2.175331, z: 2.175331}
   m_Children: []
   m_Father: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &72450189
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -390,6 +390,7 @@ GameObject:
   - component: {fileID: 229035216}
   - component: {fileID: 229035215}
   - component: {fileID: 229035214}
+  - component: {fileID: 229035218}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -459,6 +460,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 217.48799, z: 0}
+--- !u!114 &229035218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 229035213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c3d8a4cabb4f4f4b8e3da0d093334fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 2144464989}
+  StartRadius: 4
+  EndRadius: 15
+  StartHeight: 3
+  EndHeight: 18
+  RotSpeed: 0.5
+  AnimationTime: 30
+  StartDownLookingFudge: 1
+  EndDownLookingFudge: 0.2
 --- !u!1001 &458126181
 Prefab:
   m_ObjectHideFlags: 0
@@ -466,6 +487,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: LeafBendCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4996075726996956, guid: de4bc2cf383290141ab59f493716c998, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -502,6 +528,234 @@ Prefab:
       propertyPath: m_Name
       value: FlowerBase
       objectReference: {fileID: 0}
+    - target: {fileID: 1610768834319330, guid: de4bc2cf383290141ab59f493716c998, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: WidthDivisions
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: HeightDivisions
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114779207803764676, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: WidthDivisions
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114779207803764676, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: HeightDivisions
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: LeafBendCurve.m_Curve.Array.data[1].time
+      value: 1.0075073
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: LeafBendCurve.m_Curve.Array.data[1].value
+      value: -0.0039367676
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: LeafBendCurve.m_Curve.Array.data[1].inSlope
+      value: 2.4903526
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: LeafBendCurve.m_Curve.Array.data[1].outSlope
+      value: 2.4903526
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: LeafBendCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: InnerPush
+      value: 82
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: MidPush
+      value: 87.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: OuterPush
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: InnerTwist
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: MidTwist
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: OuterTwist
+      value: 33.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: InnerLength
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: MidLength
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: OuterLength
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396600587187670, guid: de4bc2cf383290141ab59f493716c998, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 3.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: InnerScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: MidScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: BendFactor
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: LeafBendCurve.m_Curve.Array.data[0].inSlope
+      value: -2.7482626
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: LeafBendCurve.m_Curve.Array.data[0].outSlope
+      value: -2.7482626
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: OuterScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: InnerPetals.Push
+      value: 82
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: InnerPetals.Twist
+      value: 125
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: InnerPetals.Length
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: InnerPetals.Scale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: MidPetals.Push
+      value: 87
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: MidPetals.Twist
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: MidPetals.Length
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: MidPetals.Scale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: OuterPetals.Push
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: OuterPetals.Twist
+      value: 33
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: OuterPetals.Length
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: OuterPetals.Scale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: InnerPetals.NumPetals
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: MidPetals.NumPetals
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 114355316906862224, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: OuterPetals.NumPetals
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 114779207803764676, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: Leaves.NumPetals
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114779207803764676, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: Leaves.Push
+      value: -18
+      objectReference: {fileID: 0}
+    - target: {fileID: 114779207803764676, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: Leaves.Twist
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114779207803764676, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: Leaves.Length
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114779207803764676, guid: de4bc2cf383290141ab59f493716c998,
+        type: 2}
+      propertyPath: Leaves.Scale
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: de4bc2cf383290141ab59f493716c998, type: 2}
   m_IsPrefabParent: 0
@@ -514,15 +768,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4922908121819114, guid: ca3a1d1f09123d940b117d43d99c5e9e, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -8
+      value: -6.566
       objectReference: {fileID: 0}
     - target: {fileID: 4922908121819114, guid: ca3a1d1f09123d940b117d43d99c5e9e, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.72
       objectReference: {fileID: 0}
     - target: {fileID: 4922908121819114, guid: ca3a1d1f09123d940b117d43d99c5e9e, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -8
+      value: -9.083
       objectReference: {fileID: 0}
     - target: {fileID: 4922908121819114, guid: ca3a1d1f09123d940b117d43d99c5e9e, type: 2}
       propertyPath: m_LocalRotation.x
@@ -574,6 +828,19 @@ Prefab:
     - target: {fileID: 114073336869394264, guid: ca3a1d1f09123d940b117d43d99c5e9e,
         type: 2}
       propertyPath: RecursiveVine
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1564225873994032, guid: ca3a1d1f09123d940b117d43d99c5e9e, type: 2}
+      propertyPath: m_Name
+      value: Vine
+      objectReference: {fileID: 0}
+    - target: {fileID: 23819859319878250, guid: ca3a1d1f09123d940b117d43d99c5e9e,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b1585cc2c6478cc4db783b1d82b99ca2, type: 2}
+    - target: {fileID: 1564225873994032, guid: ca3a1d1f09123d940b117d43d99c5e9e, type: 2}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
@@ -707,10 +974,85 @@ Prefab:
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 1122315427971144, guid: 620091fc749c08a4ab2112fd0d0a3698, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
   m_ParentPrefab: {fileID: 100100000, guid: 620091fc749c08a4ab2112fd0d0a3698, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1237190671
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1237190674}
+  - component: {fileID: 1237190673}
+  - component: {fileID: 1237190672}
+  m_Layer: 0
+  m_Name: Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!154 &1237190672
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1237190671}
+  m_Material: {fileID: 0}
+  m_Enabled: 1
+  m_TerrainData: {fileID: 15600000, guid: 73c3192c2b61b2147982aceeebffe93d, type: 2}
+  m_EnableTreeColliders: 1
+--- !u!218 &1237190673
+Terrain:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1237190671}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_TerrainData: {fileID: 15600000, guid: 73c3192c2b61b2147982aceeebffe93d, type: 2}
+  m_TreeDistance: 5000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMaximumLOD: 0
+  m_CastShadows: 1
+  m_DrawHeightmap: 1
+  m_DrawTreesAndFoliage: 1
+  m_ReflectionProbeUsage: 1
+  m_MaterialType: 0
+  m_LegacySpecular:
+    serializedVersion: 2
+    rgba: 4286545791
+  m_LegacyShininess: 0.078125
+  m_MaterialTemplate: {fileID: 0}
+  m_BakeLightProbesForTrees: 1
+  m_ScaleInLightmap: 0.0512
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
+--- !u!4 &1237190674
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1237190671}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -250, y: 0, z: -250}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1524593419
 GameObject:
   m_ObjectHideFlags: 0
@@ -860,3 +1202,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 49.974003, y: -199.51399, z: 1.8690001}
+--- !u!1 &2144464984 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1564225873994032, guid: ca3a1d1f09123d940b117d43d99c5e9e,
+    type: 2}
+  m_PrefabInternal: {fileID: 488107047}
+--- !u!114 &2144464985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2144464984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cdfe149296e06843923155dd2527f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TimeToAnimate: 30
+  StartingHeight: 0
+  EndHeight: 10
+  StartingTwists: 0.0001
+  EndTwists: 3
+  StartingMajorRadius: 0.5
+  EndMajorRadius: 3
+  StartingMinorRadius: 0.1
+  EndMinorRadius: 1
+--- !u!4 &2144464989 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4922908121819114, guid: ca3a1d1f09123d940b117d43d99c5e9e,
+    type: 2}
+  m_PrefabInternal: {fileID: 488107047}

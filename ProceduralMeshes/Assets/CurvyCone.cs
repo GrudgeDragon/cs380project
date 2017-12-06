@@ -80,7 +80,7 @@ public class CurvyCone : MonoBehaviour
             // add a ring to the mesh
             int ring; // index of the first vert in a ring
 
-            ring = MeshBuilder.AddRing(local, minorSubdivisions, radius);
+            ring = MeshBuilder.AddRing(local, minorSubdivisions, radius, 0);
 
 
             // if this is not the first ring

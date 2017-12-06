@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,62 +14,52 @@ public class FlowerPetals : MonoBehaviour
     public AnimationCurve LeafWidthCurve;
     public AnimationCurve LeafCrossSectionCurve;
     public AnimationCurve LeafCrossSectionHeight;
-    public AnimationCurve LeafCurve;
+    public AnimationCurve LeafBendCurve;
     public int WidthDivisions = 15;
     public int HeightDivisions = 15;
-    public float InnerPush = 1.8f;
-    public float MidPush = 3.69f;
-    public float OutterPush = 7.82f;
-    public float InnerTwist = -0.64f;
-    public float MidTwist = 1.42f;
-    public float OuterTwist = 1;
-    public float InnerLength = 2.91f;
-    public float MidLength = 3.01f;
-    public float OuterLength = 3.14f;
-    public float ProfileFactor = 1;
 
-
-    void MakePetal(Matrix4x4 local, float length)
+    [Serializable]
+    public struct PetalAttributes
     {
-        // front and back of petal
-        MeshBuilder.AddLatticeWithCurves(local, length, 1, ProfileFactor, HeightDivisions, WidthDivisions, false, LeafWidthCurve, LeafCrossSectionCurve, LeafCrossSectionHeight, LeafCurve);
-        MeshBuilder.AddLatticeWithCurves(local, length, 1, ProfileFactor, HeightDivisions, WidthDivisions, true, LeafWidthCurve, LeafCrossSectionCurve, LeafCrossSectionHeight, LeafCurve);
+        public int NumPetals;
+        public float Push;
+        public float Twist;
+        public float Length;
+        public float Scale;
+    }
+
+    public PetalAttributes InnerPetals;
+    public PetalAttributes MidPetals;
+    public PetalAttributes OuterPetals;
+
+    public float ProfileFactor = 1;
+    public float BendFactor = 1;
+
+
+
+    void MakePetals(PetalAttributes petal)
+    {
+        for (int i = 0; i < petal.NumPetals; ++i)
+        {
+            float r = 2 * Mathf.PI * (float)i / petal.NumPetals;
+            float t = (float)i / petal.NumPetals;
+            Vector3 up = new Vector3(Mathf.Cos(r), Mathf.Sin(r));
+            Matrix4x4 trans = Matrix4x4.Rotate(Quaternion.AngleAxis(petal.Push, up))
+                            * Matrix4x4.Rotate(Quaternion.AngleAxis(t * 360.0f, Vector3.forward))
+                            * Matrix4x4.Rotate(Quaternion.AngleAxis(petal.Twist, Vector3.up))
+                            * Matrix4x4.Scale(new Vector3(petal.Scale, petal.Scale, petal.Scale));
+            // front and back of petal
+            MeshBuilder.AddLatticeWithCurves(trans, petal.Length, 1, ProfileFactor, HeightDivisions, WidthDivisions, false, LeafWidthCurve, LeafCrossSectionCurve, LeafCrossSectionHeight, LeafBendCurve, BendFactor);
+            MeshBuilder.AddLatticeWithCurves(trans, petal.Length, 1, ProfileFactor, HeightDivisions, WidthDivisions, true, LeafWidthCurve, LeafCrossSectionCurve, LeafCrossSectionHeight, LeafBendCurve, BendFactor);
+        }
+
     }
 
     void MakeBombAssFlower()
     {
-        int numPetals = 8;
-        for (int i = 0; i < numPetals; ++i)
-        {
-            float r = 2 * Mathf.PI * (float)i / numPetals;
-            float rp = 2 * Mathf.PI * (float)(i + InnerTwist) / numPetals;
-            Vector3 up = new Vector3(Mathf.Cos(r), Mathf.Sin(r));
-            Matrix4x4 rot = Matrix4x4.Rotate(Quaternion.AngleAxis(InnerTwist, up)) * Matrix4x4.Rotate(Quaternion.LookRotation(Vector3.forward, up));
-
-            MakePetal(rot, InnerLength);
-        }
-
-        float f = 1.2f; // scale factor
-        numPetals = 13;
-        for (int i = 0; i < numPetals; ++i)
-        {
-            float r = 2 * Mathf.PI * (i + 0.33f) / numPetals;
-            float rp = 2 * Mathf.PI * (float)(i + MidTwist) / numPetals;
-            Vector3 up = new Vector3(Mathf.Cos(r), Mathf.Sin(r));
-            Matrix4x4 rot = Matrix4x4.Rotate(Quaternion.AngleAxis(MidTwist, up)) * Matrix4x4.Rotate(Quaternion.LookRotation(Vector3.forward, up));
-            MakePetal(rot * Matrix4x4.Scale(new Vector3(f, f, f)), MidLength);
-        }
-
-        f = 1.4f; // scale factor
-        numPetals = 21;
-        for (int i = 0; i < numPetals; ++i)
-        {
-            float r = 2 * Mathf.PI * (i + 0.66f) / numPetals;
-            float rp = 2 * Mathf.PI * (float)(i + OuterTwist) / numPetals;
-            Vector3 up = new Vector3(Mathf.Cos(r), Mathf.Sin(r));
-            Matrix4x4 rot = Matrix4x4.Rotate(Quaternion.AngleAxis(OuterTwist, up)) * Matrix4x4.Rotate(Quaternion.LookRotation(Vector3.forward, up));
-            MakePetal(rot * Matrix4x4.Scale(new Vector3(f, f, f)), OuterLength);
-        }
+        MakePetals(InnerPetals);
+        MakePetals(MidPetals);
+        MakePetals(OuterPetals);
     }
 
     // this gets called when we want to to build a mesh
