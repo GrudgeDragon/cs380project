@@ -105,12 +105,14 @@ public class Helix : MonoBehaviour
             float r = flip * t * arc;
 
             // this f(x) and `f(x) are used for determining the radius. f(x) is an arbitrary function. outputs [0,1] for t [0,1]
-            float x = flip * (-(t * t) + 2 * t);
+            float x = flip * (-(t * t) + 2 * t); //+ RandomTools.Gaussian(0.0f, -tc, tc, tc/4.0f);
             float dx = flip * -2 * t + 2;
 
             // helix equation and its derivitive are used to get position and direction. we make the helix start straight up by applying t to minimize early twisting.
             Vector3 pos = new Vector3(flip * t * x * majorRadius * Mathf.Cos(r),         t * height, flip * t * x * majorRadius * Mathf.Sin(r));
             Vector3 dir = new Vector3(flip * t * dx * majorRadius * -Mathf.Sin(r) * arc, height,     flip * t * dx * majorRadius * Mathf.Cos(r) * arc);
+
+            //pos = pos + RandomTools.Gaussian(0.0f, t-0.1f, t+0.1f, t/4.0f) * Vector3.up;
 
             // use position and direction to create our local matrices
             Matrix4x4 trans = Matrix4x4.Translate(pos); // position in helix
@@ -147,9 +149,10 @@ public class Helix : MonoBehaviour
                                                     tc * minorRadius * fudge * Mathf.Sin(u)); // direction spike will point
                 // exists in vine space space
                 Vector3 normal_model = helixToModel * normal_helix; // put the spike direction into local space
+                Vector3 adjustedNormal_model = normal_model + 1.2f*Vector3.up;
 
                 // up in this space is normal to the vine
-                Matrix4x4 normalRot = Matrix4x4.Rotate(Quaternion.LookRotation(dir, normal_model));
+                Matrix4x4 normalRot = Matrix4x4.Rotate(Quaternion.LookRotation(dir, adjustedNormal_model));
                 Matrix4x4 normalToModel = vineToModel * trans * normalRot; // normal space to model space
 
            
