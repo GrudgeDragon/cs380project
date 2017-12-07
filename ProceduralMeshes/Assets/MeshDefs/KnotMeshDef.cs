@@ -8,6 +8,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 class KnotMeshDef : MonoBehaviour, IMeshDef
 {
+    // See http://www.mi.sanu.ac.rs/vismath/taylor2009/index.html
     public float m;
     public float n;
     public float p;
