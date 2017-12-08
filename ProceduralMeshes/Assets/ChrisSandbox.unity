@@ -391,6 +391,7 @@ GameObject:
   - component: {fileID: 229035215}
   - component: {fileID: 229035214}
   - component: {fileID: 229035218}
+  - component: {fileID: 229035219}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -454,7 +455,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 229035213}
   m_LocalRotation: {x: -0, y: 0.94696367, z: -0, w: -0.32134062}
-  m_LocalPosition: {x: 11, y: 5.43, z: 13.6}
+  m_LocalPosition: {x: 28.11, y: 5.43, z: -20.82}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -466,12 +467,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 229035213}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c3d8a4cabb4f4f4b8e3da0d093334fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 2144464989}
+  target: {fileID: 1646299022}
   StartRadius: 4
   EndRadius: 15
   StartHeight: 3
@@ -480,6 +481,14 @@ MonoBehaviour:
   AnimationTime: 30
   StartDownLookingFudge: 1
   EndDownLookingFudge: 0.2
+--- !u!45 &229035219
+Skybox:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 229035213}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: 931987be26c9646429c56f8a4692bb81, type: 2}
 --- !u!1 &328562594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1559,7 +1568,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1237190671}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -250, y: 0, z: -250}
+  m_LocalPosition: {x: -229.6, y: -1.6, z: -289.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2007,8 +2016,3 @@ MonoBehaviour:
   EndMajorRadius: 3
   StartingMinorRadius: 0.1
   EndMinorRadius: 1
---- !u!4 &2144464989 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4922908121819114, guid: ca3a1d1f09123d940b117d43d99c5e9e,
-    type: 2}
-  m_PrefabInternal: {fileID: 488107047}
