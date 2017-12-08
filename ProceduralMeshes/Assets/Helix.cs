@@ -21,6 +21,7 @@ public class Helix : MonoBehaviour
     public bool RecursiveVine = false;
     public Transform flowerPrefab;
     public String flower;
+    public int seedFudge;
     private List<Transform> spawnedObjects = new List<Transform>();
 
     void GenerateMesh()
@@ -43,7 +44,7 @@ public class Helix : MonoBehaviour
     void Start()
     {
         Vector3 startPosition = transform.position;
-        UnityEngine.Random.InitState((int)(startPosition.x + startPosition.y + startPosition.z));
+        UnityEngine.Random.InitState((int)(startPosition.x + startPosition.y + startPosition.z + seedFudge));
         seeds.Push(UnityEngine.Random.state);
         GenerateMesh();
     }
@@ -112,11 +113,12 @@ public class Helix : MonoBehaviour
             Vector3 pos = new Vector3(flip * t * x * majorRadius * Mathf.Cos(r),         t * height, flip * t * x * majorRadius * Mathf.Sin(r));
             Vector3 dir = new Vector3(flip * t * dx * majorRadius * -Mathf.Sin(r) * arc, height,     flip * t * dx * majorRadius * Mathf.Cos(r) * arc);
 
+            
             //pos = pos + RandomTools.Gaussian(0.0f, t-0.1f, t+0.1f, t/4.0f) * Vector3.up;
 
             // use position and direction to create our local matrices
             Matrix4x4 trans = Matrix4x4.Translate(pos); // position in helix
-            Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.LookRotation(dir, flip*Vector3.up)); // direction of helix
+            Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.LookRotation(dir, flip * Vector3.up)); // direction of helix
             Matrix4x4 helixToModel = vineToModel * trans * rotation; 
 
             // make spikes and other decorators
@@ -133,11 +135,12 @@ public class Helix : MonoBehaviour
 
 
                 // ~15% chance to make a decorator, less likely at the begining
+                float chanceToSkip = 0.85f;
                 float roll = UnityEngine.Random.value;
-                if (roll < 0.85)
+                if (roll < chanceToSkip)
                     continue;
 
-                roll = (roll - 0.85f) / 0.15f;
+                roll = (roll - chanceToSkip) / (1 - chanceToSkip);
 
                 float u = ((float)j / minorSubdivisions) * 2 * Mathf.PI; // normalized param
 
@@ -145,21 +148,27 @@ public class Helix : MonoBehaviour
                 //fudge = 1.0f; //todo: put fudge back
 
                 // the normal in helix space
-                Vector3 normal_helix = new Vector3(tc * minorRadius * fudge * Mathf.Cos(u),
+                Vector3 surfaceNormal = new Vector3(tc * minorRadius * fudge * Mathf.Cos(u),
                                                     tc * minorRadius * fudge * Mathf.Sin(u)); // direction spike will point
+                //Vector4 surfacePos = surfaceNormal;
+                //surfacePos.w = 1;
+
+                Matrix4x4 surfaceToModel = helixToModel * Matrix4x4.Translate(surfaceNormal) *
+                                           Matrix4x4.Rotate(Quaternion.LookRotation(Vector3.forward, surfaceNormal));
+                // start bad
                 // exists in vine space space
-                Vector3 normal_model = helixToModel * normal_helix; // put the spike direction into local space
-                Vector3 adjustedNormal_model = normal_model + 1.2f*Vector3.up;
-
+                Vector3 normal_model = helixToModel * surfaceNormal; // put the spike direction into local space
+                // Vector3 adjustedNormal_model = normal_model + 1.2f*Vector3.up;
+                
                 // up in this space is normal to the vine
-                Matrix4x4 normalRot = Matrix4x4.Rotate(Quaternion.LookRotation(dir, adjustedNormal_model));
+                Matrix4x4 normalRot = Matrix4x4.Rotate(Quaternion.LookRotation(normal_model, dir));
                 Matrix4x4 normalToModel = vineToModel * trans * normalRot; // normal space to model space
-
+                // end bad
            
                 if (usingRecursive && recursive && roll < 0.1) // doesn't use spawn new vines in the bottom third
                 {
                     seeds.Push(UnityEngine.Random.state);
-                    MakeASweetAssHelix(normalToModel, majorRadius * tc, minorRadius * tc * tc, height * tc * tc, revolutions * tc * tc, false, false, 
+                    MakeASweetAssHelix(surfaceToModel, majorRadius * tc, minorRadius * tc * tc, height * tc * tc * 0.5f, revolutions * tc * tc * 0.5f, false, false, 
                         effecitveSegmentLength / 2 * tc, minorSubdivisions, ref spawnCounter, startingUVHeight, Mathf.Lerp(startingUVHeight, endUVHeight, tc), -1);
                     UnityEngine.Random.state = seeds.Pop();
                     roll = 1;
@@ -186,7 +195,7 @@ public class Helix : MonoBehaviour
                             spawnedObjects.Add(other);
                         }
                         else
-                        {
+                        { 
                             // recycle one from the pool
                             other = spawnedObjects[spawnCounter];
                             spawnedObjects[spawnCounter].gameObject.SetActive(true);
@@ -195,7 +204,7 @@ public class Helix : MonoBehaviour
 
                         Vector3 d = normal_model;
                         d = transform.localToWorldMatrix * normal_model; // works on first vine, not recursive vine
-                        d = transform.localToWorldMatrix * normalToModel * Vector3.up;
+                        //d = transform.localToWorldMatrix * normalToModel * Vector3.up;
 
                         // set rotation of spawned object
                         other.rotation = Quaternion.LookRotation(d, Vector3.up);
@@ -213,7 +222,7 @@ public class Helix : MonoBehaviour
                 }
                 else
                 {
-                    MeshBuilder.MakeCone(normalToModel, 0.25f * minorRadius * tc, 2 * minorRadius * tc, tc*tc, 1);
+                    MeshBuilder.MakeCone(surfaceToModel, 0.25f * minorRadius * tc, 2 * minorRadius * tc, tc*tc, 1);
                 }
             }
 
