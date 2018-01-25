@@ -21,7 +21,7 @@ public class Sphere : MonoBehaviour {
         {
             float t = (float) i / HeightDivisions;
             float r = Mathf.Sin(t * Mathf.PI) * Radius;
-            r = Radius;
+            //r = Radius;
             float h = Mathf.Cos(t * Mathf.PI) * Radius;
             Matrix4x4 trans = Matrix4x4.Translate(Vector3.forward * h);
             int ring = MeshBuilder.AddRing(trans, RadialSubdivisions, r, t);
