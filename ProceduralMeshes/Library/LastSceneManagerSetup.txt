@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/ChrisSandbox.unity
+- path: Assets/VineSandbox.unity
   isLoaded: 1
   isActive: 1

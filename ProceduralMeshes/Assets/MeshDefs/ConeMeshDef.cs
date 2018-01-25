@@ -15,6 +15,8 @@ class ConeMeshDef : MonoBehaviour, IMeshDef
 
     public float OffsetIntensity = 0.3f;
     public float OffsetCurvePow = 1.5f;
+    public int MajorDivs = 100;
+    public int MinorDivs = 10;
 
     public Vector4 ParameterizedPosition(float t)
     {
@@ -42,7 +44,7 @@ class ConeMeshDef : MonoBehaviour, IMeshDef
         return BaseRadius * Mathf.Pow((1 - t), CurvePow);
     }
 
-    public int MajorSubdivisions { get { return 100; } }
-    public int MinorSubdivisions { get { return 10; } }
+    public int MajorSubdivisions { get { return MajorDivs; } }
+    public int MinorSubdivisions { get { return MinorDivs; } }
     public bool HasParameterizedDirection { get { return false; } }
 }

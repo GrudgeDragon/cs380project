@@ -6,11 +6,13 @@ public class CurvyCone : MonoBehaviour
 {
     // All mesh generators should have these
     public bool RebuildLive = false;
+
     public bool Rebuild = false;
     private int seed;
 
     // these fields are custom to this mesh generator
     public AnimationCurve XCurve;
+
     public AnimationCurve YCurve;
     public AnimationCurve ZCurve;
     public int numSegments = 50;
@@ -27,12 +29,12 @@ public class CurvyCone : MonoBehaviour
         GenerateCurvySpine(); // custom mesh building function goes here
         MeshBuilder.PostBuild(mesh);
     }
-    
+
     // gets called when the object is created
     void Start()
     {
         Vector3 startPosition = GetComponent<Transform>().position;
-        seed = (int)(startPosition.x + startPosition.y + startPosition.z);
+        seed = (int) (startPosition.x + startPosition.y + startPosition.z);
         GenerateMesh();
     }
 
@@ -57,8 +59,8 @@ public class CurvyCone : MonoBehaviour
         //Vector3 prevPos = Vector3.zero;
         for (int i = 0; i < numSegments; ++i)
         {
-            float t = (float)i / numSegments;
-            float tp = (float)(i + 1) / numSegments; // `t, next t 
+            float t = (float) i / numSegments;
+            float tp = (float) (i + 1) / numSegments; // `t, next t 
             float tc = 1 - t; // compliment of t
 
             // use position and direction to create our local matrices
@@ -92,5 +94,52 @@ public class CurvyCone : MonoBehaviour
 
         }
 
+
     }
+
+    public static void CurvySpine(Matrix4x4 toModelSpace, int numSegments, int minorSubdivisions, float ConeRadius,
+        float Height, float Factor, AnimationCurve XCurve, AnimationCurve YCurve, AnimationCurve ZCurve)
+    {
+
+
+        int prevRing = -1;
+        //Vector3 prevPos = Vector3.zero;
+        for (int i = 0; i < numSegments; ++i)
+        {
+            float t = (float) i / numSegments;
+            float tp = (float) (i + 1) / numSegments; // `t, next t 
+            float tc = 1 - t; // compliment of t
+
+            // use position and direction to create our local matrices
+            Vector3 pos = Vector3.up * t * Height;
+            Vector3 dir;
+
+            float radius = tc * ConeRadius;
+
+            pos = Factor * new Vector3(XCurve.Evaluate(t), YCurve.Evaluate(t), ZCurve.Evaluate(t));
+            dir = new Vector3(XCurve.Evaluate(tp) - XCurve.Evaluate(t), YCurve.Evaluate(tp) - YCurve.Evaluate(t),
+                ZCurve.Evaluate(tp) - ZCurve.Evaluate(t));
+
+            Matrix4x4 trans = Matrix4x4.Translate(pos);
+            Matrix4x4 rotation; // = Matrix4x4.Rotate(Quaternion.LookRotation(dir, Vector3.up));
+            rotation = Matrix4x4.Rotate(Quaternion.LookRotation(dir, dir));
+
+            Matrix4x4 local = trans * rotation;
+
+            // add a ring to the mesh
+            int ring; // index of the first vert in a ring
+
+            ring = MeshBuilder.AddRing(local, minorSubdivisions, radius, 0);
+
+
+            // if this is not the first ring
+            if (prevRing != -1)
+                MeshBuilder.AddBand(ring, prevRing,
+                    minorSubdivisions); // make a band of triangles from this and the last ring
+
+            prevRing = ring;
+
+        }
+    }
+
 }

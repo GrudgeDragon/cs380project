@@ -87,7 +87,7 @@ namespace Assets
                 Matrix4x4 trans = Matrix4x4.Translate(pos);
                 Matrix4x4 rot = Matrix4x4.Rotate(Quaternion.LookRotation(dir, dir));
 
-                int ring = MeshBuilder.AddRing(trans * rot, def.MinorSubdivisions, def.ParameterizedRadius(t), 1 - t);
+                int ring = MeshBuilder.AddRing(trans * rot, def.MinorSubdivisions, def.ParameterizedRadius(t), t);
                 if (prevRing != -1)
                 {
                     MeshBuilder.AddBand(ring, prevRing, def.MinorSubdivisions); 

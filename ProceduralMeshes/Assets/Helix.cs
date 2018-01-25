@@ -20,15 +20,21 @@ public class Helix : MonoBehaviour
     int minorSubdivisions = 10;     // number of verts in the rings
     public bool RecursiveVine = false;
     public Transform flowerPrefab;
+    public Transform spinePrefab;
     public String flower;
     public int seedFudge;
+    public AnimationCurve ConeXCurve;
+    public AnimationCurve ConeYCurve;
+    public AnimationCurve ConeZCurve;
     private List<Transform> spawnedObjects = new List<Transform>();
+    private List<Transform> spawnedSpines = new List<Transform>();
 
     void GenerateMesh()
     {
         Mesh mesh = GetComponent<MeshFilter>().mesh;
         MeshBuilder.PreBuild(mesh);
         int spawnCounter = 0;
+        int spineCounter = 0;
         MakeASweetAssHelix(Matrix4x4.identity, 
             HelixMajorRadius, 
             HelixMinorRadius, 
@@ -37,7 +43,7 @@ public class Helix : MonoBehaviour
             true,
             RecursiveVine, 
             SegmentLength, minorSubdivisions,
-            ref spawnCounter, 0, 1, 1);
+            ref spawnCounter, 0, 1, 1, ref spineCounter);
         MeshBuilder.PostBuild(mesh);
     }
 
@@ -63,7 +69,7 @@ public class Helix : MonoBehaviour
     }
 
 
-    void MakeASweetAssHelix(Matrix4x4 vineToModel, float majorRadius, float minorRadius, float height, float revolutions, bool recursive, bool usingRecursive, float segmentLength, int minorSubdivisions, ref int spawnCounter, float startingUVHeight, float endUVHeight, float flip)
+    void MakeASweetAssHelix(Matrix4x4 vineToModel, float majorRadius, float minorRadius, float height, float revolutions, bool recursive, bool usingRecursive, float segmentLength, int minorSubdivisions, ref int spawnCounter, float startingUVHeight, float endUVHeight, float flip, ref int spineCounter)
     {
         UnityEngine.Random.state = seeds.Peek();
 
@@ -144,7 +150,7 @@ public class Helix : MonoBehaviour
 
                 float u = ((float)j / minorSubdivisions) * 2 * Mathf.PI; // normalized param
 
-                float fudge = 0.8f; // becase the bases of cones and helices aren't tight, have to pull them back in a bit
+                float fudge = 0.7f; // becase the bases of cones and helices aren't tight, have to pull them back in a bit
                 //fudge = 1.0f; //todo: put fudge back
 
                 // the normal in helix space
@@ -168,8 +174,8 @@ public class Helix : MonoBehaviour
                 if (usingRecursive && recursive && roll < 0.1) // doesn't use spawn new vines in the bottom third
                 {
                     seeds.Push(UnityEngine.Random.state);
-                    MakeASweetAssHelix(surfaceToModel, majorRadius * tc, minorRadius * tc * tc, height * tc * tc * 0.5f, revolutions * tc * tc * 0.5f, false, false, 
-                        effecitveSegmentLength / 2 * tc, minorSubdivisions, ref spawnCounter, startingUVHeight, Mathf.Lerp(startingUVHeight, endUVHeight, tc), -1);
+                    MakeASweetAssHelix(surfaceToModel, majorRadius * tc, minorRadius * tc * tc * 0.75f, height * tc * tc * 0.5f, revolutions * tc * tc * 0.5f, false, false, 
+                        effecitveSegmentLength / 2 * tc, minorSubdivisions, ref spawnCounter, startingUVHeight, Mathf.Lerp(startingUVHeight, endUVHeight, tc), -1, ref spineCounter);
                     UnityEngine.Random.state = seeds.Pop();
                     roll = 1;
                 }
@@ -185,7 +191,7 @@ public class Helix : MonoBehaviour
                     s = (-20 * (t - 0.75f) * (t - 0.75f) + 1) * 0.1f * minorRadius;
                     if (s > 0)
                     {
-                        Debug.Log("size: " + s);
+                        //Debug.Log("size: " + s);
                         // get the object to spawn
                         Transform other;
                         if (spawnedObjects.Count < spawnCounter + 1)
@@ -218,11 +224,49 @@ public class Helix : MonoBehaviour
                         // set scale of spawned object
 
                         other.localScale = new Vector3(s, s, s);
+                        if (!(s > 0))
+                            other.gameObject.SetActive(false);
+                        else
+                            other.gameObject.SetActive(true);
+
                     }
                 }
                 else
                 {
-                    MeshBuilder.MakeCone(surfaceToModel, 0.25f * minorRadius * tc, 2 * minorRadius * tc, tc*tc, 1);
+                    //MeshBuilder.MakeCone(surfaceToModel, 0.25f * minorRadius * tc, 2 * minorRadius * tc, tc*tc, 1);
+
+                    Transform other;
+                    if (spawnedSpines.Count < spineCounter + 1)
+                    {
+                        // spawn one
+                        other = Instantiate(spinePrefab, Vector3.zero, Quaternion.identity, transform);
+                        spawnedSpines.Add(other);
+                    }
+                    else
+                    {
+                        // recycle one from the pool
+                        other = spawnedSpines[spineCounter];
+                        spawnedSpines[spineCounter].gameObject.SetActive(true);
+                    }
+                    spineCounter++;
+
+                    Vector3 d = normal_model;
+                    d = transform.localToWorldMatrix * normal_model; // works on first vine, not recursive vine
+                    //d = transform.localToWorldMatrix * normalToModel * Vector3.up;
+
+                    // set rotation of spawned object
+                    other.rotation = Quaternion.LookRotation(d, Vector3.up);
+
+                    fudge = 1;
+                    // set position of spawned object
+                    Vector4 otherPos = (pos + (normal_model * fudge));
+                    otherPos.w = 1;
+                    other.position = transform.localToWorldMatrix * vineToModel * otherPos;
+                    //other.position = spineSpace * new Vector4(0,0,0,1);
+
+                    // set scale of spawned object
+                    float s = 5.0f * minorRadius * tc;
+                    other.localScale = new Vector3(s, s, s);
                 }
             }
 
@@ -244,6 +288,11 @@ public class Helix : MonoBehaviour
             spawnedObjects[i].gameObject.SetActive(false);
         }
 
+        // disable any unused objects
+        for (int i = spineCounter; i < spawnedSpines.Count; ++i)
+        {
+            spawnedSpines[i].gameObject.SetActive(false);
+        }
     }
 
 
